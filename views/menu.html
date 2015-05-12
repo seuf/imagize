@@ -1,0 +1,30 @@
+<nav class="light-blue darken-3" role="navigation">
+  <div class="nav-wrapper container">
+    <a id="logo-container" href="/" class="brand-logo center">{{ title }}</a>
+    <div class="left hide-on-med-and-down">
+        {% if dir %}
+          {% if parent == '' %}
+            <a href="index.php" class="collection-item"><i class="mdi-navigation-arrow-back left"></i>Retour</a>
+          {% else %}
+            <a href="index.php?dir={{ parent }}" class="collection-item"><i class="mdi-navigation-arrow-back left"></i>Retour</a>
+          {% endif %}
+        {% endif %}
+    </div>
+    <ul class="right hide-on-med-and-down">
+      {% if user.login is defined %} 
+               <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
+        <li><a href="logout.php">Se déconnecter</a></li>
+      {% else %}
+        <li><a href="login.php">Se connecter</a></li>
+        <li><a href="register.php">S'inscrire</a></li>
+      {% endif %}
+    </ul>
+
+    <ul id="nav-mobile" class="side-nav">
+      <li><a href="#">Navbar Link</a></li>
+    </ul>
+    <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+  </div>
+</nav>
+
+

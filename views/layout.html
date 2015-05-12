@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+        <!-- CSS  -->
+        <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <!-- <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>-->
+        <script src="js/jquery-2.1.4.min.js"></script>
+    </head>
+    <body class="grey lighten-2">
+    {% include "menu.html" %}
+
+
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container" style="width: 90%">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+
+  <footer class="page-footer grey darken-2">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Imagize</h5>
+          <p class="grey-text text-lighten-4">{{ sub_title }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="js/materialize.js"></script>
+
+  </body>
+</html>
+

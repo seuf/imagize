@@ -1,0 +1,134 @@
+{% if not dir or files.nb_files ==0 %}
+<div class="row" id="albums">
+  {% for item in files|sort|reverse %}
+    {% if item != nb_files %}
+      <div class="col s12 m2">
+        <div class="card">
+          <div class="card-image">
+            {% if dir %}
+              <a href="index.php?dir={{ dir }}/{{ item.name }}"><img src="{{ cache_path }}/{{ dir }}/{{ item.name }}/{{ item.first_img }}"></a>
+            {% else %}
+              <a href="index.php?dir={{ item.name }}"><img src="{{ cache_path }}/{{ item.name }}/{{ item.first_img }}"></a>
+            {% endif %}
+          </div>
+          <div class="card-content">
+            <a href="index.php?dir={{ item.name }}"><h5>{{ item.name }}</h5></a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
+<script>
+$(document).ready(function() {
+    $('#sort_up').click(function() {
+        alert('lol');
+        $('#sort_down').removeClass('active');
+        $('#sort_up').addClass('active');
+        $('#albums').sort();
+    });
+
+    $('#sort_down').click(function() {
+        $('#sort_up').removeClass('active');
+        $('#sort_down').addClass('active');
+        $('#albums').reverse();
+    });
+});
+</script>
+{% else %}
+
+<div class="row">
+   <div class="collection col s2">
+   {% for item in files|sort %}
+      {% if item.is_dir %}
+        {% if dir %}
+          <a href="index.php?dir={{ dir }}/{{ item.name }}" class="collection-item">{{ item.name }}</a>
+        {% else %}
+          <a href="index.php?dir={{ item.name }}" class="collection-item">{{ item.name }}</a>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="col s10">
+    <div class="row">
+      <div id="selected" class="col s10 m8"></div>
+    </div>
+    {% for item in files|sort %}
+      {% if not item.is_dir %}
+        <div class="col s10 m4">
+          <div class="card">
+            <div class="card-image">
+              {% if item.extension == 'jpg' or item.extension == 'png' %}
+                  <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" class="img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
+              {% else %}
+                  <img src="images/video-player-250.png" class="video_item" alt="{{ dir }}/{{ item.name }}" id="{{ item.name }}" style="cursor: pointer">
+              {% endif %}
+              <span class="card-title">{{ item.name }}</span>
+                
+            </div>
+            {% if item.extension == 'jpg' or item.extension == 'png' %}
+              <div class="card-content">
+                <img class="rotate-left left-align" src="images/rotate-left.png" id="rotate-left-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
+                <img class="rotate-right right" src="images/rotate-right.png" id="rotate-right-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.img_item').click(function() {
+            // Toggle already selected images to thumbnail
+            if ($('.img_selected').length > 0) {
+                img_cache_src = $('.img_selected').attr('src').replace("{{ base_path }}", "{{ cache_path }}");
+                $('.img_selected').attr('src', img_cache_src);
+                $('.img_selected').parents('.m12').addClass('m4');
+                $('.img_selected').parents('.m4').removeClass('m12');
+                $('.img_selected').removeClass('img_selected');
+            }
+            // replace selected thumbail by big one
+            img_src = $(this).attr('src').replace("{{ cache_path }}", "{{ base_path }}");
+            $(this).addClass('img_selected');
+            $(this).attr('src', img_src);
+            $(this).parents('.m4').addClass('m12');
+            $(this).parents('.m12').removeClass('m4');
+            //$(this).before('<img src="rotate-left.png" id="rotate-left-'+img_src+'">');
+            //$(this).after('<img src="rotate-right.png" id="rotate-right-'+img_src+'">');
+            $(this).wrap('<a target="_new" href="'+img_src+'"></a>');
+//            $('#selected').html('<div class="card"><div class="card-image"><a target="_new" href="'+img_src+'"><img class="responsive-img" src="'+ img_src +'" /></a></div></div>');
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('.video_item').click(function() {
+            video_src = $(this).attr('alt');
+            $(this).parents('.m4').addClass('m12');
+            $(this).parents('.m12').removeClass('m4');
+            $(this).parent().html('<video class="video-container img_selected" controls><source src="{{ base_path }}/'+video_src+'" ></video>');
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('.rotate-left').click(function() {
+            filename = $(this).attr('id').replace('rotate-left-', '');
+            $.ajax({url: "ajax/rotate_image.php", data: { filename: filename, angle: 90 }, async: false }); 
+            // Refresh image src
+            img_src = $(this).parents('.card').children().children('.img_item').attr('src');
+            $(this).parents('.card').children().children('.img_item').attr('src', img_src+'#'+ new Date().getTime());
+
+        });
+        $('.rotate-right').click(function() {
+            filename = $(this).attr('id').replace('rotate-right-', '');
+            $.ajax({url: "ajax/rotate_image.php", data: { filename: filename, angle: 270 }, async: false }); 
+            img_src = $(this).parents('.card').children().children('.img_item').attr('src');
+            $(this).parents('.card').children().children('.img_item').attr('src', img_src+'#'+ new Date().getTime());
+        });
+    });
+
+</script>
+{% endif %}
