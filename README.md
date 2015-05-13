@@ -23,7 +23,7 @@ wget https://github.com/seuf/imagize/releases/imagize-1.0.tar.gz
 tar -xzvf imagize-1.0.tar.gz
 ```
 
-### Next
+### Configuration
 
 Create a config.ini file with the following elements :
 
@@ -34,9 +34,17 @@ images_thumbs_path = cache/thumbnails
 thumb_size = 250
 ```
 
+### Permissions
+
 Create a symlink to your Images Directory :
 ```
 ln -s /path/to/Albums data
+```
+
+Give write access to www-data (to allow image rotation when clicking on arrow icons on images cards..):
+```
+sudo chgrp -R www-data data
+sudo chmod -R g+w data
 ```
 
 create a cache directory with writing permission for your web server :
