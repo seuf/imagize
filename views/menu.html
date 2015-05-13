@@ -10,6 +10,7 @@
           {% endif %}
         {% endif %}
     </div>
+    <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
     <ul class="right hide-on-med-and-down">
       {% if user.login is defined %} 
                <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
@@ -19,11 +20,15 @@
         <li><a href="register.php">S'inscrire</a></li>
       {% endif %}
     </ul>
-
-    <ul id="nav-mobile" class="side-nav">
-      <li><a href="#">Navbar Link</a></li>
+    <ul class="side-nav" id="mobile-menu">
+      {% if user.login is defined %} 
+               <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
+        <li><a href="logout.php">Se déconnecter</a></li>
+      {% else %}
+        <li><a href="login.php">Se connecter</a></li>
+        <li><a href="register.php">S'inscrire</a></li>
+      {% endif %}
     </ul>
-    <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
   </div>
 </nav>
 
