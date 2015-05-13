@@ -69,7 +69,7 @@ $(document).ready(function() {
                 
             </div>
             {% if item.extension == 'jpg' or item.extension == 'png' %}
-              <div class="card-content">
+              <div class="card-content hide-on-med-and-down">
                 <img class="rotate-left left-align" src="images/rotate-left.png" id="rotate-left-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
                 <img class="rotate-right right" src="images/rotate-right.png" id="rotate-right-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
               </div>
