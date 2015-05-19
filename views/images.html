@@ -57,25 +57,23 @@ $(document).ready(function() {
     </div>
     {% for item in files|sort %}
       {% if not item.is_dir %}
-        <div class="col s10 m4">
-          <div class="card">
-            <div class="card-image">
-              {% if item.extension == 'jpg' or item.extension == 'png' %}
-                  <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" class="img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
-              {% else %}
-                  <img src="images/video-player-250.png" class="video_item" alt="{{ dir }}/{{ item.name }}" id="{{ item.name }}" style="cursor: pointer">
-              {% endif %}
-              <span class="card-title">{{ item.name }}</span>
-                
-            </div>
-            {% if item.extension == 'jpg' or item.extension == 'png' %}
+        {% if item.extension == 'jpg' or item.extension == 'png' %}
+          <div class="col s10 m4">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" class="img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
+                <span class="card-title">{{ item.name }}</span>
+              </div>
               <div class="card-content hide-on-med-and-down">
                 <img class="rotate-left left-align" src="images/rotate-left.png" id="rotate-left-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
                 <img class="rotate-right right" src="images/rotate-right.png" id="rotate-right-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
               </div>
-            {% endif %}
+            </div>
           </div>
-        </div>
+        {% else %}
+          {# Video #}
+          {# <img src="images/video-player-250.png" class="video_item" alt="{{ dir }}/{{ item.name }}" id="{{ item.name }}" style="cursor: pointer">#}
+        {% endif %}
       {% endif %}
     {% endfor %}
   </div>
