@@ -2,6 +2,7 @@
 
 require_once 'lib/config.php';
 require_once 'lib/images.php';
+require_once 'lib/users.php';
 require_once 'lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
@@ -11,11 +12,13 @@ $twig = new Twig_Environment($loader, array(
     'auto_reload' => true,
 ));
 
-$template = $twig->loadTemplate('index.html');
+$template = $twig->loadTemplate('admin.html');
 
 $config = parse_ini('config/config.ini');
 $messages = array();
-
+$errors = array();
+$users = array();
+$dirs = array();
 
 session_start();
 $user = $_SESSION['user'];
@@ -23,19 +26,13 @@ $dir = '';
 $parent = '';
 
 if (isset($user['login']) and $user['login'] != '') {
+    if (isset($user['admin']) and $user['admin']) {
+        $dirs = get_dirs($config['images_path']);
 
-    $path = $config['images_path'];
-    if (isset($_GET['dir']) and $_GET['dir'] != '') {
-        $dir = $_GET['dir'];
-        $path .= '/'.$dir;
-//        createThumbs( $path, $config['images_thumbs_path'], 250); 
-        $subdirs = explode('/', $dir);
-        array_pop($subdirs);
-        $parent = join('/', $subdirs);
+        $users = get_users();
+    } else {
+        $errors[] = "Hep Hep Hep, tu vas où là ?";
     }
-    $files = list_dir($path); 
-
-
 
 }
 
@@ -43,10 +40,9 @@ if (isset($user['login']) and $user['login'] != '') {
 echo $template->render(array(
     'title'     => $config['title'],
     'user'      => $_SESSION['user'],
-    'files'     => $files,
-    'dir'       => $dir,
-    'parent'    => $parent,
     'base_path' => $config['images_path'],
+    'dirs'      => $dirs,
+    'users'     => $users,
     'cache_path' => $config['images_thumbs_path'],
 ));
 

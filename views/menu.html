@@ -13,8 +13,11 @@
     </div>
     <a href="#" data-activates="mobile-menu" class="button-collapse right"><i class="mdi-navigation-menu"></i></a>
     <ul class="right hide-on-med-and-down">
-      {% if user.login is defined %} 
-               <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
+      {% if user.login is defined %}
+        {% if user.admin %}
+          <li><a href="admin.php">Admin</a></li>
+        {% endif %}
+        <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
         <li><a href="logout.php">Se déconnecter</a></li>
       {% else %}
         <li><a href="login.php">Se connecter</a></li>
@@ -23,7 +26,10 @@
     </ul>
     <ul class="side-nav" id="mobile-menu">
       {% if user.login is defined %} 
-               <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
+        {% if user.admin %}
+          <li><a href="admin.php">Admin</a></li>
+        {% endif %}
+        <li><a href="user.php">{{ user.first_name }} {{ user.last_name }}</a></li>
         <li><a href="logout.php">Se déconnecter</a></li>
       {% else %}
         <li><a href="login.php">Se connecter</a></li>

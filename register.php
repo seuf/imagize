@@ -43,7 +43,7 @@ if (isset($_POST['login']) and $_POST['login'] != '') {
     }
 
     if ($first_name != '' and $last_name != '' and $mail != '' and $password != '') {
-        $fh = fopen('.passwd_waiting_for_approval', 'a');
+        $fh = fopen('config/users/.passwd_waiting_for_approval', 'a');
         fwrite($fh, "$login||$first_name||$last_name||$mail||$password\n");
         fclose($fh);
         $message[] = "Inscription effectuée avec succès..";

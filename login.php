@@ -1,6 +1,7 @@
 <?php
 
 
+require_once 'lib/config.php';
 require_once 'lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
@@ -19,7 +20,7 @@ $messages = array();
 
 if (isset($_POST['login']) and $_POST['login'] != '' and isset($_POST['password']) and $_POST['password'] != '') {
     $login_success = false;
-    $fh = fopen('.passwd', 'r');
+    $fh = fopen('config/users/.passwd', 'r');
     while ($line = fgets($fh)) {
         $line = rtrim($line);
         list($login, $first_name, $last_name, $mail, $password) = explode('||', $line);
@@ -29,6 +30,11 @@ if (isset($_POST['login']) and $_POST['login'] != '' and isset($_POST['password'
             $user['first_name'] = $first_name;
             $user['last_name']  = $last_name;
             $user['mail'] = $mail;
+
+            $config = parse_ini('config/config.ini');
+            if ($login == $config['admin_user']) {
+                $user['admin'] = true;
+            }
 
             $login_success = true;
             $messages[] = 'Authentification réussie !';

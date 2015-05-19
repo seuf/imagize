@@ -33,6 +33,31 @@ function list_dir($dir) {
 }
 
 
+function get_dirs($dir) {
+
+    $folders = array();
+
+
+    if ($dh = opendir($dir)) {
+        while (false !== ($entry = readdir($dh))) {
+            if (preg_match('/^\./', $entry)) {
+                continue;
+            }
+            $file = array();
+            $file['is_dir'] = is_dir($dir.'/'.$entry);
+            if ($file['is_dir']) {
+                $file['name']  = $entry;
+                $file['sub_dirs'] = get_dirs($dir.'/'.$entry);
+                $folders[] = $file;
+            }
+        }
+        closedir($dh);
+    }
+
+    return $folders;
+}
+
+
 function get_directory_first_image($dir) {
 
     $file = '';
@@ -136,6 +161,8 @@ function createThumbnail($pathToImages, $fname, $pathToThumbs, $thumbWidth) {
 
     }
 }
+
+
 
 //$files = list_dir('/home/seuf/Images/Charlie');
 //print_r($files);

@@ -22,7 +22,7 @@ if ($extension == 'jpg') {
 require_once('../lib/config.php');
 require_once('../lib/images.php');
 
-$config   = parse_ini('../config.ini');
+$config   = parse_ini('../config/config.ini');
 $subdirs  = explode('/', $filename);
 $file     = array_pop($subdirs);
 $filename_path = join('/', $subdirs);
