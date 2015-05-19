@@ -25,10 +25,11 @@ tar -xzvf imagize-1.0.tar.gz
 
 ### Configuration
 
-Create a config.ini file with the following elements :
+Create a config/config.ini file with the following elements :
 
 ```
 title = Imagize Rocks !
+admin_user = seuf
 images_path = data
 images_thumbs_path = cache/thumbnails
 thumb_size = 250
@@ -76,4 +77,6 @@ Here is an example of line to copy in the .passwd file :
 seuf||Thierry||Sallé||seuf@aperogeek.fr||485c903c9c1fdff5c55e68555a2a6eef
 ```
 
+## Users permissions
 
+ToDO...
