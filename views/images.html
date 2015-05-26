@@ -1,4 +1,4 @@
-{% if not dir or files.nb_files ==0 %}
+{% if not dir or files.nb_files == 0 %}
 <div class="row" id="albums">
   {% for item in files|sort|reverse %}
     {% if item != nb_files %}
@@ -59,16 +59,7 @@ $(document).ready(function() {
       {% if not item.is_dir %}
         {% if item.extension == 'jpg' or item.extension == 'png' %}
           <div class="col s10 m4">
-            <div class="card">
-              <div class="card-image">
-                <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" class="img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
-                <span class="card-title">{{ item.name }}</span>
-              </div>
-              <div class="card-content hide-on-med-and-down">
-                <img class="rotate-left left-align" src="images/rotate-left.png" id="rotate-left-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
-                <img class="rotate-right right" src="images/rotate-right.png" id="rotate-right-{{ base_path }}/{{ dir }}/{{ item.name }}" style="cursor: pointer"/>
-              </div>
-            </div>
+            <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" width="250" class="materialboxed img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
           </div>
         {% else %}
           {# Video #}
@@ -85,20 +76,11 @@ $(document).ready(function() {
             if ($('.img_selected').length > 0) {
                 img_cache_src = $('.img_selected').attr('src').replace("{{ base_path }}", "{{ cache_path }}");
                 $('.img_selected').attr('src', img_cache_src);
-                $('.img_selected').parents('.m12').addClass('m4');
-                $('.img_selected').parents('.m4').removeClass('m12');
-                $('.img_selected').removeClass('img_selected');
             }
             // replace selected thumbail by big one
             img_src = $(this).attr('src').replace("{{ cache_path }}", "{{ base_path }}");
             $(this).addClass('img_selected');
             $(this).attr('src', img_src);
-            $(this).parents('.m4').addClass('m12');
-            $(this).parents('.m12').removeClass('m4');
-            //$(this).before('<img src="rotate-left.png" id="rotate-left-'+img_src+'">');
-            //$(this).after('<img src="rotate-right.png" id="rotate-right-'+img_src+'">');
-            $(this).wrap('<a target="_new" href="'+img_src+'"></a>');
-//            $('#selected').html('<div class="card"><div class="card-image"><a target="_new" href="'+img_src+'"><img class="responsive-img" src="'+ img_src +'" /></a></div></div>');
         } );
     } );
 
