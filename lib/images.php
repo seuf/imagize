@@ -1,14 +1,29 @@
 <?php
 
+require_once('users.php');
+require_once('config.php');
+
+
+
 function list_dir($dir) {
 
     $files = array();
     $nb_files = 0;
 
 
+    $user = $_SESSION['user'];
+    $u = get_user($user['login']);
+
+    $config = parse_ini('config/config.ini');
+    $base_path = $config['images_path'];
+
     if ($dh = opendir($dir)) {
         while (false !== ($entry = readdir($dh))) {
             if (preg_match('/^\./', $entry)) {
+                continue;
+            }
+            $permission_dir = preg_replace('/'.$base_path.'\//', '', $dir.'/'.$entry);
+            if (!in_array($permission_dir, $u['dirs'])) {
                 continue;
             }
             $file = array();
@@ -19,9 +34,13 @@ function list_dir($dir) {
             } else {
                 $info = pathinfo($dir.'/'.$entry);
                 $file['extension'] = strtolower($info['extension']);
-                $nb_files++;
+                if (preg_match('/jpg|jpeg|png/', $file['extension'])) {
+                    $nb_files++;
+                }
             }
-            $files[] = $file;
+            if ($file['first_img'] or $nb_files) {
+                $files[] = $file;
+            }
         }
         $files['nb_files'] = $nb_files;
         closedir($dh);
@@ -47,7 +66,11 @@ function get_dirs($dir) {
             $file['is_dir'] = is_dir($dir.'/'.$entry);
             if ($file['is_dir']) {
                 $file['name']  = $entry;
-                $file['sub_dirs'] = get_dirs($dir.'/'.$entry);
+                $sub_dirs = get_dirs($dir.'/'.$entry);
+                foreach ($sub_dirs as $subdir) {
+                    $subdir['name'] = $entry.'/'.$subdir['name'];
+                    $folders[] = $subdir;
+                }
                 $folders[] = $file;
             }
         }

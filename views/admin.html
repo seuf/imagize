@@ -17,38 +17,46 @@
     </div>
   {% endif %}
 
-  <form action="admin.php">
-    <ul class="collapsible" data-collapsible="expandable">
-    {% for dir in dirs|sort|reverse %}
-      <li>
-        <div class="collapsible-header"><i class="mdi-file-folder"></i>{{ dir.name }}</div>
-        <div class="collapsible-body">
-          {% for user in users %}
-            <p>{{ user.first_name }} {{ user.last_name }}
+  <ul class="collapsible" data-collapsible="expandable">
+  {% for user in users %}
+    <li>
+      <div class="collapsible-header"><i class="mdi-file-folder"></i>{{ user.first_name }} {{ user.last_name }}</div>
+      <div class="collapsible-body">
+        <div class="row">
+          {% for dir in dirs|sort|reverse %}
+            <div class="col s2">
               {% set checked = false %}
               {% for d in user.dirs %}
                 {% if d == dir.name %}
                   {% set checked = true %}
                 {% endif %}
               {% endfor %}
-               <div class="switch"><label>Non<input type="checkbox" {% if checked %}checked="checked"{% endif %}><span class="lever"></span>Oui</label></div>
-            </p>
+              <input class="permission" type="checkbox" {% if checked %}checked="checked"{% endif %} name="{{ user.login }};{{ dir.name }}" id="{{ user.login }};{{ dir.name }}"/>
+              <label for="{{ user.login }};{{ dir.name }}">{{ dir.name }}</label>
+            </div>
           {% endfor %}
-          {% if dir.subdirs %}
-            <p>
-              Liste des sous répertoires :
-            </p>
-          {% endif %} 
+          </div>
         </div>
       </li>
     {% endfor %}
     </ul>
-  </form>
+
 
 <script>
   $(document).ready(function(){
     $('.collapsible').collapsible({
       accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+    $('.permission').change(function() {
+        vals = $(this).attr('name').split(';');
+        u = vals[0];
+        d = vals[1];
+        
+        $.ajax({
+            url: "ajax/save_user.php",
+            data: { user: u, dir: d, access: $(this).prop('checked') },
+            method: "POST"
+        });
     });
   });
 </script>

@@ -20,8 +20,7 @@ function get_users() {
 }
 
 function get_user($u) {
-
-    if ($fh = fopen('config/users/'.$u, 'r')) {
+    if ($fh = fopen($_SERVER['DOCUMENT_ROOT'].'/config/users/'.$u, 'r')) {
         $data = fgets($fh);
 
         fclose($fh);
@@ -37,7 +36,7 @@ function get_user($u) {
 
 function save_user($user) {
 
-    $fh = fopen('config/users/'.$user['login'], 'w');
+    $fh = fopen($_SERVER['DOCUMENT_ROOT'].'/config/users/'.$user['login'], 'w');
 
     fwrite($fh, serialize($user));
 
@@ -46,8 +45,8 @@ function save_user($user) {
 }
 /*
 $u = array();
-$u['login'] = 'bmsalle';
-$u['first_name'] = 'Michel';
+$u['login'] = 'thierry';
+$u['first_name'] = 'Thierry';
 $u['last_name'] = 'Sallé';
 $dirs = array();
 $dirs[] = "2013-06-29 - Asnières";
