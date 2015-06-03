@@ -59,7 +59,7 @@ $(document).ready(function() {
       {% if not item.is_dir %}
         {% if item.extension == 'jpg' or item.extension == 'png' %}
           <div class="col s10 m4">
-            <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" width="250" class="materialboxed img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
+            <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" height="250" class="materialboxed img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
           </div>
         {% else %}
           {# Video #}
