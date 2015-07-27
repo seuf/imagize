@@ -3,31 +3,53 @@
 function get_users() {
 
     $users = array();
-
-    if ($dh = opendir('config/users')) {
-        while (false !== ($entry = readdir($dh))) {
-            if (preg_match('/^\./', $entry)) {
-                continue;
-            }
-            $user = get_user($entry);
-            $user['name']  = $entry;
+    if ($fh = fopen($_SERVER['DOCUMENT_ROOT'].'/config/users/.passwd', 'r')) {
+        while ($line = fgets($fh)) {
+            $row = explode('||', $line);
+            $user = get_user($row[0]);
+            $user['name'] = $row[0];
+            $user['login'] = $row[0];
+            $user['first_name'] = $row[1];
+            $user['last_name'] = $row[2];
+            $user['mail'] = $row[3];
             $users[] = $user;
         }
-        closedir($dh);
+    } else {
+        echo "<p>Unable to open users config file</p>";
     }
-
     return $users;
 }
 
+
 function get_user($u) {
-    if ($fh = fopen($_SERVER['DOCUMENT_ROOT'].'/config/users/'.$u, 'r')) {
-        $data = fgets($fh);
 
-        fclose($fh);
+    $user = array();
 
-        $user = unserialize($data);
+    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/config/users/'.$u)) {
+        if ($fh = fopen($_SERVER['DOCUMENT_ROOT'].'/config/users/'.$u, 'r')) {
+            $data = fgets($fh);
+
+            fclose($fh);
+
+            $user = unserialize($data);
+        } else {
+            //echo "<p>Unable to open file for $u</p>";
+        }
     } else {
-        echo "<p>Unable to open file for $u</p>";
+
+        if ($fh = fopen($_SERVER['DOCUMENT_ROOT'].'/config/users/.passwd', 'r')) {
+            while ($line = fgets($fh)) {
+                $row = explode('||', $line);
+                if ($row[0] == $u) {
+                    $user['name'] = $row[0];
+                    $user['login'] = $row[0];
+                    $user['first_name'] = $row[1];
+                    $user['last_name'] = $row[2];
+                    $user['mail'] = $row[3];
+                }
+            }
+        }
+
     }
     return $user;
 
