@@ -2,7 +2,7 @@
 <div class="row" id="albums">
   {% for item in files|sort|reverse %}
     {% if item != nb_files %}
-      <div class="col s12 m2">
+      <div class="col">
         <div class="card">
           <div class="card-image">
             {% if dir %}
@@ -51,15 +51,14 @@ $(document).ready(function() {
       {% endif %}
     {% endfor %}
   </div>
-  <div class="col s10">
-    <div class="row">
-      <div id="selected" class="col s10 m8"></div>
-    </div>
+  <div class="col s12">
     {% for item in files|sort %}
       {% if not item.is_dir %}
         {% if item.extension == 'jpg' or item.extension == 'png' %}
-          <div class="col s10 m4">
-            <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" height="250" class="materialboxed img_item" alt="" id="{{ item.name }}" style="cursor: pointer">
+          <div class="col s3" style="margin: 45px">
+            <img src="{{ cache_path }}/{{ dir }}/{{ item.name }}" width="250px" class="materialboxed img_item {{ item.transform }}" alt="" id="{{ item.name }}" style="cursor: pointer;">
+            <div class="card-content hide-on-med-and-down">
+            </div>
           </div>
         {% else %}
           {# Video #}
@@ -73,13 +72,13 @@ $(document).ready(function() {
     $(document).ready(function() {
         $('.img_item').click(function() {
             // Toggle already selected images to thumbnail
-            if ($('.img_selected').length > 0) {
-                img_cache_src = $('.img_selected').attr('src').replace("{{ base_path }}", "{{ cache_path }}");
-                $('.img_selected').attr('src', img_cache_src);
-            }
+            //if ($('.img_selected').length > 0) {
+            //img_cache_src = $('.img_selected').attr('src').replace("{{ base_path }}", "{{ cache_path }}");
+            //$('.img_selected').attr('src', img_cache_src);
+            //}
             // replace selected thumbail by big one
             img_src = $(this).attr('src').replace("{{ cache_path }}", "{{ base_path }}");
-            $(this).addClass('img_selected');
+            //$(this).addClass('img_selected');
             $(this).attr('src', img_src);
         } );
     } );
@@ -92,23 +91,5 @@ $(document).ready(function() {
             $(this).parent().html('<video class="video-container img_selected" controls><source src="{{ base_path }}/'+video_src+'" ></video>');
         } );
     } );
-
-    $(document).ready(function() {
-        $('.rotate-left').click(function() {
-            filename = $(this).attr('id').replace('rotate-left-', '');
-            $.ajax({url: "ajax/rotate_image.php", data: { filename: filename, angle: 90 }, async: false }); 
-            // Refresh image src
-            img_src = $(this).parents('.card').children().children('.img_item').attr('src');
-            $(this).parents('.card').children().children('.img_item').attr('src', img_src+'#'+ new Date().getTime());
-
-        });
-        $('.rotate-right').click(function() {
-            filename = $(this).attr('id').replace('rotate-right-', '');
-            $.ajax({url: "ajax/rotate_image.php", data: { filename: filename, angle: 270 }, async: false }); 
-            img_src = $(this).parents('.card').children().children('.img_item').attr('src');
-            $(this).parents('.card').children().children('.img_item').attr('src', img_src+'#'+ new Date().getTime());
-        });
-    });
-
 </script>
 {% endif %}

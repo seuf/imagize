@@ -9,6 +9,7 @@ function list_dir($dir) {
 
     $files = array();
     $nb_files = 0;
+    $nb_dirs = 0;
 
 
     $user = $_SESSION['user'];
@@ -22,19 +23,34 @@ function list_dir($dir) {
             if (preg_match('/^\./', $entry)) {
                 continue;
             }
-            $permission_dir = preg_replace('/'.$base_path.'\//', '', $dir.'/'.$entry);
-            if (!in_array($permission_dir, $u['dirs'])) {
-                continue;
-            }
             $file = array();
             $file['name']  = $entry;
             $file['is_dir'] = is_dir($dir.'/'.$entry);
             if ($file['is_dir']) {
-               $file['first_img'] = get_directory_first_image($dir.'/'.$entry); 
+                $permission_dir = preg_replace('/'.$base_path.'\//', '', $dir.'/'.$entry);
+                if (!in_array($permission_dir, $u['dirs'])) {
+                    continue;
+                }
+                $file['first_img'] = get_directory_first_image($dir.'/'.$entry); 
+                $nb_dirs++;
             } else {
                 $info = pathinfo($dir.'/'.$entry);
                 $file['extension'] = strtolower($info['extension']);
                 if (preg_match('/jpg|jpeg|png/', $file['extension'])) {
+                    $exif = exif_read_data ( $dir.'/'.$entry );
+                    $transform = "";
+                    switch ($exif['Orientation']) {
+                        case 1: $transform = ''; break;
+                        case 2: $transform = "flip-horizontal"; break;
+                        case 3: $transform = "rotate-180"; break;
+                        case 4: $transform = "flip-vertical"; break;
+                        case 5: $transform = "transpose"; break;
+                        case 6: $transform = "rotate-90"; break;
+                        case 7: $transform = "transverse"; break;
+                        case 8: $transform = "rotate-270"; break;
+                        default: $transform = ""; break;
+                    }
+                    $file['transform'] = $transform;
                     $nb_files++;
                 }
             }
@@ -43,6 +59,7 @@ function list_dir($dir) {
             }
         }
         $files['nb_files'] = $nb_files;
+        $files['nb_dirs'] = $nb_dirs;
         closedir($dh);
     } else {
         return false;
